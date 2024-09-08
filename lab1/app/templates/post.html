@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <article class="my-5">
+        <h1>{{ post.title }}</h1>
+        <p class="text-muted">
+            Опубликовано {{ post.date.strftime('%d.%m.%Y') }}. Автор: {{ post.author }}.
+        </p>
+        <img class="img-fluid mb-4" src="{{ url_for('static', filename='images/' + post.image_id) }}" alt="Post image">
+        <p>{{ post.text }}</p>
+
+		<div class="card my-5">
+			<div class="card-header">
+				Оставьте комментарий
+			</div>
+			<div class="card-body">
+				<form method="post">
+					<div class="mb-3">
+						<textarea class="form-control" rows="3" placeholder="Введите ваш комментарий"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Отправить</button>
+				</form>
+			</div>
+		</div>
+		
+
+        <section class="comments mt-5">
+            <h3>Комментарии</h3>
+            <ul class="list-unstyled">
+                {% for comment in post.comments %}
+                    <li class="media mb-3">
+                        <img class="mr-3" src="https://via.placeholder.com/64" alt="Avatar">
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1">{{ comment.author }}</h5>
+                            <p>{{ comment.text }}</p>
+                            {% if comment.replies %}
+                                <ul class="list-unstyled">
+                                    {% for reply in comment.replies %}
+                                        <li class="media mt-3">
+                                            <img class="mr-3" src="https://via.placeholder.com/48" alt="Avatar">
+                                            <div class="media-body">
+                                                <h5 class="mt-0 mb-1">{{ reply.author }}</h5>
+                                                <p>{{ reply.text }}</p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <a href="{{ url_for('posts') }}" class="btn btn-primary mt-4">Назад ко всем постам</a>
+    </article>
+{% endblock %}
